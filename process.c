@@ -21,7 +21,7 @@
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
 
-// 参数压栈
+
 void push_argument (void **esp, int argc, int argv[]);
 
 
@@ -141,7 +141,7 @@ strlcpy(fn_copy,file_name,strlen(file_name)+1);
   Push argument into stack, this method is used in Task 1 Argument Pushing */
 void
 push_argument (void **esp, int argc, int argv[]){
-  *esp = (int)*esp & 0xfffffffc;//四位对齐,word-align
+  *esp = (int)*esp & 0xfffffffc;//word-align
   *esp -= 4;
   *(int *) *esp = 0;
    

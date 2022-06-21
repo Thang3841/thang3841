@@ -322,9 +322,7 @@ thread_exit (void)
   printf ("%s: exit(%d)\n",thread_name(), thread_current()->st_exit);
 
   /*Sema up the semaphore for the process*/
-  //保存下来st_exit在process_wait中使用
   thread_current ()->thread_child->store_exit = thread_current()->st_exit;
-  //子线程退出，把资源还给父线程
   sema_up (&thread_current()->thread_child->sema);
   
   /*Close all the files*/
