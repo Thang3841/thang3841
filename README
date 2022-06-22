@@ -1,6 +1,6 @@
 Process Termination Message
 
-1.Thêm đoạn code sau vào cấu trúc chuỗi struct trong thread.h để lưu giá trị trả về trạng thái thoát.
+1.Thêm đoạn code sau vào cấu trúc chuỗi struct trong thread.h để lưu giá trị trả về của exit status.
 int st_exit;
 
 2. Thêm câu lệnh in thông tin kết thúc vào hàm thread_exit () trong thread.c và in thông tin như sau.
