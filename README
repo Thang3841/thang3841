@@ -1,0 +1,55 @@
+Process Termination Message
+
+1.Thêm đoạn code sau vào cấu trúc chuỗi struct trong thread.h để lưu giá trị trả về trạng thái thoát.
+int st_exit;
+
+2. Thêm câu lệnh in thông tin kết thúc vào hàm thread_exit () trong thread.c và in thông tin như sau.
+printf("%s: exit(%d)\n", thread_name(), thread_current()->st_exit);
+
+Argument Passing
+
+1.Xây dựng hàm push_argument () trong tệp process.c để push ngăn xếp.
+
+void push_argument (void **esp, int argc, int argv[]){
+  *esp = (int)*esp & 0xfffffffc;//内存对齐
+  *esp -= 4;
+  *(int *) *esp = 0;
+  int i;
+  for (i = argc - 1; i >= 0; i--)
+  {
+    *esp -= 4;
+    *(int *) *esp = argv[i];
+  }
+  *esp -= 4;
+  *(int *) *esp = (int) *esp + 4;
+  *esp -= 4;
+  *(int *) *esp = argc;
+  *esp -= 4;
+  *(int *) *esp = 0;
+} 
+
+2.Chỉnh sử hàm start_process () để lưu dòng lệnh, chia các tham số dòng lệnh cho hoạt động ngăn xếp và gọi hàm load ().
+
+char *fn_copy=malloc(strlen(file_name)+1);
+strlcpy(fn_copy,file_name,strlen(file_name)+1);
+char *token, *save_ptr;
+file_name = strtok_r (file_name, " ", &save_ptr); 
+
+3.Tạo thêm đoạn mã thực hiện chức năng push trong hàm start_process().
+
+if (success){
+    /* Our implementation for Task 1:
+      Calculate the number of parameters and the specification of parameters */
+    int argc = 0;
+    /* The number of parameters can't be more than 50 in the test case */
+    int argv[50];
+    for (token = strtok_r (fn_copy, " ", &save_ptr); token != NULL; token = strtok_r (NULL, " ", &save_ptr)){
+      if_.esp -= (strlen(token)+1);
+      memcpy (if_.esp, token, strlen(token)+1);
+      argv[argc++] = (int) if_.esp;
+    }
+    push_argument (&if_.esp, argc, argv);
+    /* Record the exec_status of the parent thread's success and sema up parent's semaphore */
+    thread_current ()->parent->success = true;
+    sema_up (&thread_current ()->parent->sema);
+  } 
